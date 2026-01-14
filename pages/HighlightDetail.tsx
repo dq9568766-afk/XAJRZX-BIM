@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Download, FileText, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Download, FileText, Play, Maximize2, X } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 
 const HighlightDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { highlights } = useData();
   const highlight = highlights.find(h => h.id === id);
+  const [viewingMedia, setViewingMedia] = useState<{ type: 'image' | 'video', url: string } | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,7 +35,7 @@ const HighlightDetail: React.FC = () => {
 
       <div className="container mx-auto px-6">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          
+
           {/* Header Image */}
           <div className="relative h-[400px]">
             <img src={highlight.thumbnail} alt={highlight.title} className="w-full h-full object-cover" />
@@ -46,10 +47,10 @@ const HighlightDetail: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 p-8 md:p-12">
-            
+
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
-              
+
               {/* Description */}
               <section>
                 <h3 className="text-2xl font-bold text-concrete-800 mb-6 flex items-center">
@@ -61,16 +62,46 @@ const HighlightDetail: React.FC = () => {
                 </div>
               </section>
 
-              {/* Image Gallery */}
+              {/* Results Gallery (Images & Video) */}
               <section>
                 <h3 className="text-2xl font-bold text-concrete-800 mb-6 flex items-center">
                   <span className="w-1.5 h-8 bg-wood-500 rounded-full mr-3"></span>
                   成果展示
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Video Item */}
+                  {highlight.videoUrl && (
+                    <div
+                      className="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer h-64 bg-black"
+                      onClick={() => setViewingMedia({ type: 'video', url: highlight.videoUrl! })}
+                    >
+                      <video src={highlight.videoUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Play size={32} className="text-white fill-white ml-1" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/60 text-white text-xs rounded flex items-center backdrop-blur-md">
+                        <Maximize2 size={12} className="mr-1" /> 成果演示
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Image Items */}
                   {highlight.images.map((img, index) => (
-                    <div key={index} className="rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                      <img src={img} alt={`Detail ${index}`} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500" />
+                    <div
+                      key={index}
+                      className="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer h-64"
+                      onClick={() => setViewingMedia({ type: 'image', url: img })}
+                    >
+                      <img
+                        src={img}
+                        alt={"Detail " + index}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <Maximize2 size={32} className="text-white drop-shadow-lg" />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -78,13 +109,13 @@ const HighlightDetail: React.FC = () => {
 
             </div>
 
-            {/* Sidebar: Files & Specs */}
+            {/* Sidebar: Files */}
             <div className="space-y-10">
-              
+
               {/* Files Download */}
               <div className="bg-concrete-50 p-6 rounded-xl border border-concrete-200">
                 <h4 className="text-lg font-bold text-concrete-800 mb-4 flex items-center">
-                  <Download size={20} className="mr-2 text-wood-600" /> 
+                  <Download size={20} className="mr-2 text-wood-600" />
                   成果文件下载
                 </h4>
                 {highlight.files.length > 0 ? (
@@ -109,28 +140,30 @@ const HighlightDetail: React.FC = () => {
                 )}
               </div>
 
-              {/* Technical Specs */}
-              {highlight.technicalSpecs && (
-                <div className="bg-concrete-900 text-white p-6 rounded-xl">
-                  <h4 className="text-lg font-bold mb-4 flex items-center text-wood-400">
-                    <CheckCircle2 size={20} className="mr-2" />
-                    技术指标
-                  </h4>
-                  <ul className="space-y-4">
-                    {Object.entries(highlight.technicalSpecs).map(([key, value]) => (
-                      <li key={key}>
-                        <span className="block text-xs text-concrete-400 uppercase tracking-wider mb-1">{key}</span>
-                        <span className="text-sm font-medium text-concrete-100">{value}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
             </div>
           </div>
         </div>
       </div>
+
+      {/* Fullscreen Media Modal */}
+      {viewingMedia && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setViewingMedia(null)}>
+          <button
+            onClick={() => setViewingMedia(null)}
+            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors z-[60]"
+          >
+            <X size={32} />
+          </button>
+
+          <div className="relative max-w-7xl max-h-[90vh] w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
+            {viewingMedia.type === 'video' ? (
+              <video src={viewingMedia.url} controls autoPlay className="max-w-full max-h-[85vh] rounded shadow-2xl outline-none" />
+            ) : (
+              <img src={viewingMedia.url} alt="Full view" className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

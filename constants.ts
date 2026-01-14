@@ -1,5 +1,5 @@
 
-import { Highlight, TeamMember, Achievement, HeroVideo, AIConfig } from './types';
+import { ProjectInfo, Highlight, Achievement, TeamMember, HeroVideo, LocationSlide, SiteSlide, AIConfig, ParticipatingUnit } from './types';
 import { MapPin, Layers, User } from 'lucide-react';
 
 export const PROJECT_INFO = {
@@ -23,14 +23,16 @@ export const PROJECT_INFO = {
 export const DEFAULT_AI_CONFIG: AIConfig = {
   provider: 'deepseek',
   providerName: 'DeepSeek (深度求索)',
-  apiKey: '', // User must input this
+  apiKey: import.meta.env.VITE_AI_API_KEY || process.env.VITE_AI_API_KEY || '', // Read from env
   baseUrl: 'https://api.deepseek.com',
   model: 'deepseek-chat',
   systemPrompt: `你是一个专业的BIM项目咨询助手，服务于"金融岛站周边一体化项目"。
 请根据以下项目背景信息回答用户的问题。
 如果是关于项目团队、亮点、成效的问题，请严格基于上下文回答。
 如果用户问候，请热情专业地回应。
-请使用中文回答，保持简洁（100字以内），除非用户要求详细解释。`
+请使用中文回答，保持简洁（100字以内），除非用户要求详细解释。`,
+  knowledgeBase: "",
+  documents: []
 };
 
 export const HERO_VIDEOS: HeroVideo[] = [
@@ -294,4 +296,12 @@ export const SITE_SLIDES = [
     title: "AI视频监控",
     desc: "全覆盖监控系统，保障现场安全文明施工"
   }
+];
+
+export const DEFAULT_PARTICIPATING_UNITS: ParticipatingUnit[] = [
+  { id: '1', category: '建设单位', name: '中国雄安集团', logo: '' },
+  { id: '2', category: '设计单位', name: '同济大学建筑设计研究院', logo: '' },
+  { id: '3', category: '总控单位', name: '雄安规划设计中心', logo: '' },
+  { id: '4', category: '总包单位', name: '中建八局', logo: '' },
+  { id: '5', category: '监理单位', name: '雄安城市建设监理', logo: '' },
 ];

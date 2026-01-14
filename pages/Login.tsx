@@ -30,9 +30,9 @@ const Login: React.FC = () => {
 
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-concrete-200">
         <div className="bg-concrete-900 p-10 text-center relative overflow-hidden">
-           {/* Decorative background element */}
-           <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-           
+          {/* Decorative background element */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+
           <div className="relative z-10">
             <div className="inline-flex p-4 rounded-2xl bg-wood-600 text-white mb-6 shadow-lg shadow-wood-900/50">
               <Building2 size={40} />
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
             <p className="text-concrete-400 mt-2 text-sm font-light">金融岛站周边一体化项目 · 数字中心</p>
           </div>
         </div>
-        
+
         <div className="p-10">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -68,8 +68,8 @@ const Login: React.FC = () => {
 
             {error && (
               <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-100 flex items-center animate-in fade-in slide-in-from-top-2">
-                 <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
-                 {error}
+                <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
+                {error}
               </div>
             )}
 
@@ -80,12 +80,8 @@ const Login: React.FC = () => {
               验证身份并进入
             </button>
           </form>
-          
-          <div className="mt-8 text-center">
-             <div className="inline-block px-3 py-1 bg-concrete-100 rounded text-xs text-concrete-400 font-mono">
-                测试环境默认密码: admin888
-             </div>
-          </div>
+
+
         </div>
       </div>
     </div>

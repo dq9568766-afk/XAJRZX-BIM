@@ -1,24 +1,54 @@
 
-import { PROJECT_INFO, HIGHLIGHTS } from "../constants";
-import { AIConfig } from "../types";
+import { AIConfig, ProjectInfo, Highlight, Achievement, TeamMember, KnowledgeDocument } from "../types";
 
-// Construct the context string
-const buildContext = () => {
+// Define interface for context data
+interface ProjectContextData {
+  projectInfo: ProjectInfo;
+  highlights: Highlight[];
+  achievements: Achievement[];
+  teamMembers: TeamMember[];
+  documents?: KnowledgeDocument[];
+}
+
+// Construct the context string dynamically
+const buildContext = (data: ProjectContextData, knowledgeBase: string = "") => {
+  const { projectInfo, highlights, achievements, teamMembers, documents } = data;
+
   return `
-Context:
-Project Name: ${PROJECT_INFO.name}
-Description: ${PROJECT_INFO.description}
-Location: ${PROJECT_INFO.location}
-Highlights: ${HIGHLIGHTS.map(h => h.title + ": " + h.summary).join("; ")}
+【项目当前实时数据】
+1. 项目基本信息：
+   - 名称：${projectInfo.name}
+   - 描述：${projectInfo.description}
+   - 地址：${projectInfo.location}
+   - 总建筑面积：${projectInfo.totalArea}
+   - 总投资额：${projectInfo.investment}
+
+2. 核心亮点应用 (${highlights.length}项)：
+   ${highlights.map((h, i) => `${i + 1}. ${h.title}: ${h.summary}`).join('\n   ')}
+
+3. 应用成效与奖项：
+   ${achievements.map(a => `- [${a.type}] ${a.title} (${a.date})`).join('\n   ')}
+
+4. 团队核心成员：
+   ${teamMembers.map(m => `- ${m.name} (${m.role}): ${m.contact}`).join('\n   ')}
+
+[补充知识库/文档内容]:
+${knowledgeBase ? "【手动输入/旧资料】:\n" + knowledgeBase.substring(0, 5000) + "\n" : ""}
+${(documents || []).length > 0 ? "【上传文档资料】:\n" + (documents || []).map(doc => `--- 文档: ${doc.name} ---\n${doc.content.substring(0, 8000)}`).join('\n\n') : "暂无上传文档"}
 `;
 };
 
-export const generateProjectResponse = async (userMessage: string, config: AIConfig): Promise<string> => {
+export const generateProjectResponse = async (
+  userMessage: string,
+  config: AIConfig,
+  contextData: ProjectContextData
+): Promise<string> => {
   if (!config.apiKey) {
     return "请先在管理后台配置 AI API Key。";
   }
 
-  const finalSystemPrompt = `${config.systemPrompt}\n${buildContext()}`;
+  // Combine System Prompt with Dynamic Context
+  const finalSystemPrompt = `${config.systemPrompt}\n\n${buildContext(contextData, config.knowledgeBase)}`;
 
   try {
     const response = await fetch(`${config.baseUrl}/chat/completions`, {
@@ -34,7 +64,7 @@ export const generateProjectResponse = async (userMessage: string, config: AICon
           { role: "user", content: userMessage }
         ],
         temperature: 0.7,
-        max_tokens: 512
+        max_tokens: 1024
       })
     });
 

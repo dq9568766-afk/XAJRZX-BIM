@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
+import {
   PROJECT_INFO as INITIAL_PROJECT_INFO,
   HIGHLIGHTS as INITIAL_HIGHLIGHTS,
   ACHIEVEMENTS as INITIAL_ACHIEVEMENTS,
@@ -8,9 +8,10 @@ import {
   HERO_VIDEOS as INITIAL_HERO_VIDEOS,
   LOCATION_SLIDES as INITIAL_LOCATION_SLIDES,
   SITE_SLIDES as INITIAL_SITE_SLIDES,
-  DEFAULT_AI_CONFIG
+  DEFAULT_AI_CONFIG,
+  DEFAULT_PARTICIPATING_UNITS
 } from '../constants';
-import { Highlight, Achievement, TeamMember, HeroVideo, LocationSlide, SiteSlide, AIConfig } from '../types';
+import { Highlight, Achievement, TeamMember, HeroVideo, LocationSlide, SiteSlide, AIConfig, ParticipatingUnit } from '../types';
 
 // Define the shape of the context data
 interface DataContextType {
@@ -43,6 +44,9 @@ interface DataContextType {
   heroVideos: HeroVideo[];
   saveHeroVideo: (item: HeroVideo) => void;
   deleteHeroVideo: (id: string) => void;
+
+  participatingUnits: ParticipatingUnit[];
+  saveParticipatingUnit: (item: ParticipatingUnit) => void;
 
   aiConfig: AIConfig;
   updateAiConfig: (config: AIConfig) => void;
@@ -80,7 +84,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [locationSlides, setLocationSlides] = useState<LocationSlide[]>(() => {
     const saved = localStorage.getItem('locationSlides');
     if (saved) return JSON.parse(saved);
-    
+
     // Convert initial constants which might have React Components to serializable objects
     return INITIAL_LOCATION_SLIDES.map(slide => ({
       ...slide,
@@ -100,6 +104,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : INITIAL_HERO_VIDEOS;
   });
 
+  // --- Participating Units ---
+  const [participatingUnits, setParticipatingUnits] = useState<ParticipatingUnit[]>(() => {
+    const saved = localStorage.getItem('participatingUnits');
+    return saved ? JSON.parse(saved) : DEFAULT_PARTICIPATING_UNITS;
+  });
+
   // --- AI Config ---
   const [aiConfig, setAiConfig] = useState<AIConfig>(() => {
     const saved = localStorage.getItem('aiConfig');
@@ -115,6 +125,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => localStorage.setItem('locationSlides', JSON.stringify(locationSlides)), [locationSlides]);
   useEffect(() => localStorage.setItem('siteSlides', JSON.stringify(siteSlides)), [siteSlides]);
   useEffect(() => localStorage.setItem('heroVideos', JSON.stringify(heroVideos)), [heroVideos]);
+  useEffect(() => localStorage.setItem('participatingUnits', JSON.stringify(participatingUnits)), [participatingUnits]);
   useEffect(() => localStorage.setItem('aiConfig', JSON.stringify(aiConfig)), [aiConfig]);
 
 
@@ -130,8 +141,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Generic helper for list updates (create or update)
   const saveItemInList = <T extends { id: string | number }>(
-    list: T[], 
-    setList: React.Dispatch<React.SetStateAction<T[]>>, 
+    list: T[],
+    setList: React.Dispatch<React.SetStateAction<T[]>>,
     item: T
   ) => {
     setList(prev => {
@@ -144,7 +155,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteItemFromList = <T extends { id: string | number }>(
-    setList: React.Dispatch<React.SetStateAction<T[]>>, 
+    setList: React.Dispatch<React.SetStateAction<T[]>>,
     id: string | number
   ) => {
     setList(prev => prev.filter(i => i.id != id));
@@ -169,8 +180,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const saveHeroVideo = (item: HeroVideo) => saveItemInList(heroVideos, setHeroVideos, item);
   const deleteHeroVideo = (id: string) => deleteItemFromList(setHeroVideos, id);
 
+  const saveParticipatingUnit = (item: ParticipatingUnit) => saveItemInList(participatingUnits, setParticipatingUnits, item);
+
   return (
-    <DataContext.Provider value={{ 
+    <DataContext.Provider value={{
       projectInfo, updateProjectInfo,
       highlights, setHighlights, deleteHighlight, saveHighlight,
       achievements, setAchievements, deleteAchievement, saveAchievement,
@@ -178,6 +191,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       locationSlides, saveLocationSlide, deleteLocationSlide,
       siteSlides, saveSiteSlide, deleteSiteSlide,
       heroVideos, saveHeroVideo, deleteHeroVideo,
+      participatingUnits, saveParticipatingUnit,
       aiConfig, updateAiConfig
     }}>
       {children}

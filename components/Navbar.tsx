@@ -27,9 +27,10 @@ const Navbar: React.FC = () => {
   ];
 
   // Helper to handle hash scrolling if on home page
-  const handleNavClick = (path: string) => {
+  const handleNavClick = (e: React.MouseEvent, path: string) => {
     setIsMobileMenuOpen(false);
     if (path.startsWith('/#') && location.pathname === '/') {
+      e.preventDefault();
       const elementId = path.replace('/#', '');
       const element = document.getElementById(elementId);
       if (element) {
@@ -45,13 +46,13 @@ const Navbar: React.FC = () => {
 
   // Common button styles for size and shape
   const commonBtnClass = "flex items-center justify-center px-6 py-2.5 rounded-full text-base md:text-lg font-medium transition-all duration-300";
-  
+
   // Hero state (transparent background) - Glassmorphism for all items (consistent style as requested)
   const heroBtnStyle = "bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/30 shadow-sm";
-  
+
   // Scrolled state (white background)
   // Links become clean pill buttons, Management button remains prominent
-  const scrolledLinkStyle = "text-concrete-700 hover:bg-concrete-100 hover:text-wood-600"; 
+  const scrolledLinkStyle = "text-concrete-700 hover:bg-concrete-100 hover:text-wood-600";
   const scrolledMgmtStyle = "bg-wood-600 text-white hover:bg-wood-700 shadow-md";
 
   // Check if we are on the admin page to adjust navbar style always to "scrolled" look (solid background)
@@ -64,17 +65,17 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3 group">
           {projectInfo.logoUrl ? (
-            <img 
-              src={projectInfo.logoUrl} 
-              alt="Logo" 
-              className="h-12 w-12 object-contain rounded-lg bg-white/10 backdrop-blur-sm p-0.5" 
+            <img
+              src={projectInfo.logoUrl}
+              alt="Logo"
+              className="h-12 w-12 object-contain rounded-lg bg-white/10 backdrop-blur-sm p-0.5"
             />
           ) : (
             <div className={`p-2.5 rounded-lg transition-colors ${forceSolidNav ? 'bg-wood-600 text-white' : 'bg-white text-wood-600'}`}>
               <Building2 size={28} />
             </div>
           )}
-          
+
           <span className={`text-2xl font-bold tracking-tight transition-colors ${forceSolidNav ? 'text-concrete-800' : 'text-white drop-shadow-md'}`}>
             {projectInfo.navTitle}<span className="font-light">{projectInfo.navSubtitle}</span>
           </span>
@@ -86,15 +87,15 @@ const Navbar: React.FC = () => {
             <Link
               key={link.name}
               to={link.path}
-              onClick={() => handleNavClick(link.path)}
+              onClick={(e) => handleNavClick(e, link.path)}
               className={`${commonBtnClass} ${forceSolidNav ? scrolledLinkStyle : heroBtnStyle}`}
             >
               {link.name}
             </Link>
           ))}
-          
+
           {/* Management Entry */}
-          <button 
+          <button
             className={`${commonBtnClass} gap-2 ml-2 ${forceSolidNav ? scrolledMgmtStyle : heroBtnStyle}`}
             onClick={handleAdminClick}
           >
@@ -104,7 +105,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className="lg:hidden text-wood-600"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
@@ -119,13 +120,13 @@ const Navbar: React.FC = () => {
             <Link
               key={link.name}
               to={link.path}
-              onClick={() => handleNavClick(link.path)}
+              onClick={(e) => handleNavClick(e, link.path)}
               className="text-concrete-800 font-medium text-lg py-3 border-b border-concrete-100 last:border-0 hover:text-wood-600 transition-colors"
             >
               {link.name}
             </Link>
           ))}
-          <button 
+          <button
             onClick={handleAdminClick}
             className="flex items-center gap-3 text-wood-600 font-medium text-lg py-3 text-left hover:text-wood-700 transition-colors"
           >

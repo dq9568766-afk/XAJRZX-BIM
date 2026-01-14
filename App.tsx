@@ -15,19 +15,19 @@ const App: React.FC = () => {
     <AuthProvider>
       <DataProvider>
         <Router>
-          <div className="font-sans antialiased text-concrete-900 bg-concrete-50 min-h-screen">
+          <div className="font-sans antialiased text-concrete-900 bg-concrete-50 min-h-screen overflow-x-hidden">
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/highlight/:id" element={<HighlightDetail />} />
               <Route path="/login" element={<Login />} />
-              <Route 
-                path="/admin" 
+              <Route
+                path="/admin"
                 element={
                   <ProtectedRoute>
                     <AdminDashboard />
                   </ProtectedRoute>
-                } 
+                }
               />
             </Routes>
             <GeminiChat />

@@ -1,20 +1,121 @@
+# 🏙️ 雄安金融岛 BIM 数字化成果展示平台
+
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  <h3>基于 Web 的 BIM 全生命周期应用可视化门户</h3>
+  <p>数字化 / 智能化 / 可视化</p>
 </div>
 
-# Run and deploy your AI Studio app
+---
 
-This contains everything you need to run your app locally.
+## 📖 项目简介
 
-View your app in AI Studio: https://ai.studio/apps/drive/1vwB-WmA5BPrkmNq_xPGDdJ_tmu8DtWmu
+本项目是为雄安金融岛 BIM 应用打造的专属展示门户，旨在通过现代化的 Web 技术，全方位呈现项目在设计、施工、运维全生命周期中的 BIM 应用成果。网站集成了视频演示、三维模型链接、亮点应用介绍、荣誉奖项展示及团队风采等功能，并配有完整的后台管理系统，支持内容甚至 AI 配置的动态更新。
 
-## Run Locally
+**核心价值**：
+- **无门槛展示**：通过浏览器即可访问复杂的 BIM 成果，无需安装专业软件。
+- **动态管理**：内置 CMS 后台，非技术人员也能轻松更新项目进展。
+- **沉浸体验**：采用现代 UI 设计，提供流畅的视觉与交互体验。
 
-**Prerequisites:**  Node.js
+---
 
+## 🛠️ 技术栈全景图
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+本项目采用 **"重前端、轻后端" (Modern SPA)** 的现代化架构，主打轻量化、高性能与零维护成本。
+
+### 1. 前端层 (Frontend)
+- **核心框架**: `React 19` (最新版)
+  - 使用 Hooks (`useState`, `useEffect`, `useContext`) 进行全链路状态管理。
+- **构建工具**: `Vite`
+  - 提供极速冷启动与秒级热更新 (HMR)，构建效率极高。
+- **开发语言**: `TypeScript`
+  - 强类型约束，极大保证了代码的健壮性与可维护性。
+- **路由管理**: `React Router v7`
+  - 管理单页应用内的页面跳转（首页 ↔ 详情页 ↔ 登录页）。
+- **UI 样式**: `Tailwind CSS`
+  - 原子化 CSS 框架，自定义了 `concrete` (混凝土灰) 和 `wood` (木纹黄) 行业专属配色。
+- **图标库**: `Lucide React`
+  - 轻量级、风格统一的 SVG 图标组件库。
+
+### 2. 后端/数据层 (Backend & Data)
+- **架构模式**: **BaaS (Backend as a Service) / Serverless**
+  - 无需传统后端服务器，部署成本极低。
+- **数据存储**: **LocalStorage (浏览器本地存储)**
+  - **机制**: 所有内容配置（标题、图片、文章）均以 JSON 格式存储在用户的浏览器中。
+  - **优势**: 读写毫秒级响应，零服务器成本，离线可用。
+  - **注意**: 数据仅在当前设备有效，适合演示与个人管理。
+- **AI 能力**: **Google Gemini API**
+  - 集成 `@google/genai` SDK，实现智能助手与内容辅助生成功能。
+
+### 3. 部署架构 (Deployment)
+- **托管平台**: **Vercel**
+  - 利用全球 Edge Network 进行静态资源分发，实现秒开体验。
+  - 支持自动化 CI/CD 流程，代码提交即自动更新。
+
+---
+
+## ✨ 核心功能模块
+
+### 🖥️ 前端展示 (Public View)
+1. **沉浸式首页**：全屏视频背景，动态轮播核心亮点。
+2. **BIM 亮点详情**：图文并茂展示具体应用点，支持**视频演示**与**高清大图**查看。
+3. **区位与现场**：交互式幻灯片，展示项目地理优势与施工现场实况。
+4. **应用成效**：网格化展示获奖证书、论文发表及观摩交流活动。
+5. **团队风采**：展示 BIM 团队组织架构与核心成员。
+
+### ⚙️ 后台管理 (Admin Dashboard)
+- **安全登录**：密码保护的后台入口。
+- **可视化编辑**：这就好比编辑朋友圈一样简单地管理网站内容。
+- **多媒体管理**：支持图片上传（Base64 压缩存储）、视频链接嵌入。
+- **AI 配置中心**：自定义 AI 助手的模型参数与提示词。
+- **实时预览**：后台修改，前台通过 React Context 实时生效。
+
+---
+
+## 🚀 快速开始 (本地运行)
+
+### 前置要求
+- 电脑已安装 **Node.js** 环境。
+
+### 启动步骤
+1. **安装依赖**：
+   ```bash
+   npm install
+   ```
+2. **配置 AI (可选)**：
+   复制 `.env.example` 为 `.env.local`，填入你的 `VITE_GEMINI_API_KEY`。
+3. **一键启动**：
+   双击根目录下的 `一键启动.bat` 脚本，或在终端运行：
+   ```bash
+   npm run dev
+   ```
+4. **访问网站**：
+   打开浏览器访问 `http://localhost:3000`
+
+---
+
+## 🔐 后台访问信息
+
+- **访问地址**: `http://localhost:3000/admin` (或点击页脚 "Admin Login")
+- **默认密码**: `Daiquan123`
+- **注意**: 请妥善保管密码，后台拥有修改所有展示内容的权限。
+
+---
+
+## 📂 项目结构概览
+
+```
+/
+├── components/       # UI 组件 (Hero, Features, Navbar...)
+├── contexts/         # 全局状态管理 (数据中心)
+├── pages/            # 页面视图 (Home, Admin, Detail...)
+├── services/         # 外部服务 (AI, LocalStorage Wrapper)
+├── types.ts          # TypeScript 类型定义
+├── index.html        # 入口 HTML
+└── vite.config.ts    # 构建配置
+```
+
+---
+
+<div align="center">
+  <small>Powered by React & Vite | Designed for BIM Visualization</small>
+</div>
