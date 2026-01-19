@@ -10,7 +10,8 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
     },
     plugins: [react()],
-    base: '/XAJRZX-BIM/', // 必须与 GitHub 仓库名一致
+    // Vercel: 默认为 '/'；GitHub Pages: 需设置环境变量 VITE_BASE_URL='/XAJRZX-BIM/'
+    base: env.VITE_BASE_URL || '/',
     define: {
       'process.env.VITE_AI_API_KEY': JSON.stringify(env.VITE_AI_API_KEY)
     },
