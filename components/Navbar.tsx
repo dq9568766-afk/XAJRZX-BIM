@@ -106,8 +106,9 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="lg:hidden text-wood-600"
+          className="lg:hidden p-3 -mr-3 text-wood-600"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} className={!forceSolidNav ? "text-white" : ""} />}
         </button>
@@ -115,20 +116,20 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white border-b border-concrete-200 shadow-lg py-6 px-6 flex flex-col space-y-4 animate-in slide-in-from-top-5 duration-200">
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white border-b border-concrete-200 shadow-lg py-4 px-4 flex flex-col space-y-2 animate-in slide-in-from-top-5 duration-200">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={(e) => handleNavClick(e, link.path)}
-              className="text-concrete-800 font-medium text-lg py-3 border-b border-concrete-100 last:border-0 hover:text-wood-600 transition-colors"
+              className="text-concrete-800 font-medium text-lg py-4 px-4 border-b border-concrete-100 last:border-0 hover:text-wood-600 hover:bg-concrete-50 active:bg-concrete-100 transition-colors rounded-lg"
             >
               {link.name}
             </Link>
           ))}
           <button
             onClick={handleAdminClick}
-            className="flex items-center gap-3 text-wood-600 font-medium text-lg py-3 text-left hover:text-wood-700 transition-colors"
+            className="flex items-center gap-3 text-wood-600 font-medium text-lg py-4 px-4 text-left hover:text-wood-700 hover:bg-wood-50 active:bg-wood-100 transition-colors rounded-lg"
           >
             <Settings size={22} />
             <span>管理后台</span>

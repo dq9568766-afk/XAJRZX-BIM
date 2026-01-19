@@ -60,6 +60,34 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* 移动端触摸优化 */
+    button,
+    a,
+    [role="button"] {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    /* 确保所有可点击元素有足够的点击区域 */
+    @media (max-width: 768px) {
+
+      button,
+      a {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
+
+    /* 修复 iOS Safari 的 hover 状态卡住问题 */
+    @media (hover: none) {
+
+      button:hover,
+      a:hover {
+        background-color: inherit;
+      }
+    }
   </style>
   <script type="importmap">
     {
